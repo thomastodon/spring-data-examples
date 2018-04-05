@@ -1,0 +1,15 @@
+buildscript {
+    apply plugin: 'org.flywaydb.flyway'
+    apply from: "$rootDir/gradle/testing.gradle"
+}
+
+flyway {
+    url = jdbcMySqlUrl
+    user = 'admin'
+    password = 'admin'
+}
+
+dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '5.0.5.RELEASE'
+}

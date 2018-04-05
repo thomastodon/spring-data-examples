@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE"
+        classpath "org.flywaydb:flyway-gradle-plugin:5.0.7"
+    }
+}
+
+allprojects {
+    group "com.github.thomastodon"
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
