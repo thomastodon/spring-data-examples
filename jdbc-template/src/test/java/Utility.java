@@ -4,7 +4,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import java.sql.Driver;
 import java.sql.SQLException;
 
-public class Utility {
+class Utility {
 
     private static Driver driver;
 

@@ -15,7 +15,7 @@ class MySqlBrickRepositoryTest {
     }
 
     @Test
-    @DisplayName("writes to database")
+    @DisplayName("writes to and reads from the database")
     void test() {
 
         brickRepository.save(new Brick(1L, "clay"));
