@@ -1,7 +1,9 @@
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class MySqlBrickRepository implements BrickRepository {
 
@@ -26,14 +28,18 @@ public class MySqlBrickRepository implements BrickRepository {
     }
 
     @Override
-    public Brick findById(long id) {
+    public Optional<Brick> findById(long id) {
 
         String sql = "SELECT * FROM brick WHERE id=:id";
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", id);
 
-        return jdbcTemplate.queryForObject(sql, parameters, brickRowMapper);
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, parameters, brickRowMapper));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

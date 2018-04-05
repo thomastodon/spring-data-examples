@@ -1,8 +1,10 @@
+import java.util.Optional;
+
 public interface BrickRepository {
 
     void save(Brick brick);
 
-    Brick findById(long id);
+    Optional<Brick> findById(long id);
 
     void deleteAll();
 }
