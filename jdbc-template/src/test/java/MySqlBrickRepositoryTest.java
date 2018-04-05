@@ -2,11 +2,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,19 +11,7 @@ class MySqlBrickRepositoryTest {
 
     @BeforeEach
     void setUp() {
-
-        try {
-            DataSource dataSource = new SimpleDriverDataSource(
-                new com.mysql.cj.jdbc.Driver(),
-                "jdbc:mysql://localhost:3306/house?useSSL=false",
-                "admin",
-                "admin"
-            );
-            NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-            brickRepository = new MySqlBrickRepository(jdbcTemplate);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        brickRepository = new MySqlBrickRepository(Utility.jdbcTemplate);
     }
 
     @Test
