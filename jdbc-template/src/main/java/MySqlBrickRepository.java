@@ -8,7 +8,7 @@ public class MySqlBrickRepository implements BrickRepository {
     private NamedParameterJdbcTemplate jdbcTemplate;
     private BrickRowMapper brickRowMapper;
 
-    public MySqlBrickRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    MySqlBrickRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.brickRowMapper = new BrickRowMapper();
     }
@@ -28,15 +28,17 @@ public class MySqlBrickRepository implements BrickRepository {
     @Override
     public Brick findById(long id) {
 
+        String sql = "SELECT * FROM brick WHERE id=:id";
+
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", id);
 
-        String sql = "SELECT * FROM brick WHERE id=:id";
         return jdbcTemplate.queryForObject(sql, parameters, brickRowMapper);
     }
 
     @Override
     public void deleteAll() {
+
         String sql = "DELETE FROM brick";
 
         jdbcTemplate.update(sql, new HashMap<>());
