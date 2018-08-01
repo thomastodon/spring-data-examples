@@ -1,10 +1,12 @@
+package io.thomastodon.spring.data.examples;
+
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import java.sql.Driver;
 import java.sql.SQLException;
 
-class Utility {
+public class Utility {
 
     private static Driver driver;
 
@@ -23,5 +25,5 @@ class Utility {
         "admin"
     );
 
-    static final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public static final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 }

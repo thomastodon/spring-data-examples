@@ -1,3 +1,6 @@
+package io.thomastodon.spring.data.examples.brick;
+
+import io.thomastodon.spring.data.examples.Utility;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,13 +22,13 @@ class MySqlBrickRepositoryTest {
 
         Brick brick = brickRepository
             .findById(1L)
-            .orElseGet(() -> Assertions.fail("Brick does not exist"));
+            .orElseGet(() -> Assertions.fail("io.thomastodon.spring.data.examples.brick.Brick does not exist"));
 
         assertThat(brick.getMaterial()).isEqualTo("clay");
     }
 
     @Test
-    @DisplayName("returns an empty optional if the brick is not there")
+    @DisplayName("returns an empty optional if the io.thomastodon.spring.data.examples.brick is not there")
     void test01() {
         assertThat(brickRepository.findById(1L)).isEmpty();
     }

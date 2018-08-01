@@ -1,3 +1,5 @@
+package io.thomastodon.spring.data.examples.brick;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 

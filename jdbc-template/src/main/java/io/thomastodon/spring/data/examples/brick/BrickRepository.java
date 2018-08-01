@@ -1,3 +1,5 @@
+package io.thomastodon.spring.data.examples.brick;
+
 import java.util.Optional;
 
 public interface BrickRepository {

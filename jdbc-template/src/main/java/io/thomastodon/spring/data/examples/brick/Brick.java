@@ -1,3 +1,5 @@
+package io.thomastodon.spring.data.examples.brick;
+
 public class Brick {
     private long id;
     private String material;
