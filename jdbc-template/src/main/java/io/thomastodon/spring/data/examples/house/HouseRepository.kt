@@ -4,15 +4,15 @@ import java.util.*
 
 interface HouseRepository {
 
-    fun findAll(): List<House>
+    fun findAll(): Map<UUID, House>
 
-    fun saveHouse(house: House)
+    fun saveHouse(house: House): UUID
 
-    fun addRoomToHouse(room: Room, houseUuid: UUID)
+    fun addRoomToHouse(houseUuid: UUID, room: Room): UUID
 
-    fun addChairToRoom(chair: Chair, roomUuid: UUID)
+    fun addChairToRoom(roomUuid: UUID, chair: Chair): UUID
 
-    fun addLegToChair(leg: Leg, chairUuid: UUID)
+    fun addLegToChair(chairUuid: UUID, leg: Leg): UUID
 
     fun deleteAll()
 }

@@ -1,20 +1,20 @@
 package io.thomastodon.spring.data.examples.house
 
-import java.util.*
-
 class HouseDtoToHouseTranslator {
 
-    fun translate(houseUuid: UUID, houseDto: HouseDto): House {
+    fun translate(houseDto: HouseDto): House {
 
         return House(
-            houseUuid,
-            houseDto.rooms.map { (roomUuid, roomDto) ->
+            style = houseDto.style,
+            rooms = houseDto.rooms.mapValues {
                 Room(
-                    roomUuid,
-                    roomDto.chairs.map { (chairUuid, chairDto) ->
+                    squareFootage = it.value.squareFootage,
+                    chairs = it.value.chairs.mapValues {
                         Chair(
-                            chairUuid,
-                            chairDto.legs.map { (legUuid, legDto) -> Leg(legUuid) }
+                            reclines = it.value.reclines,
+                            legs = it.value.legs.mapValues {
+                                Leg(it.value.material)
+                            }
                         )
                     }
                 )

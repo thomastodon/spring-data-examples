@@ -8,13 +8,17 @@ class MySqlHouseRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
     private val houseResultSetExtractor = HouseResultSetExtractor()
     private val houseDtoToHouseTranslator = HouseDtoToHouseTranslator()
 
-    override fun findAll(): List<House> {
+    override fun findAll(): Map<UUID, House> {
 
         val sql = ("SELECT"
             + " house.uuid AS house_uuid,"
+            + " house.style AS house_style,"
             + " room.uuid AS room_uuid,"
+            + " room.square_footage AS room_square_footage,"
             + " chair.uuid AS chair_uuid,"
-            + " leg.uuid AS leg_uuid"
+            + " chair.reclines AS chair_reclines,"
+            + " leg.uuid AS leg_uuid,"
+            + " leg.material AS leg_material"
             + " FROM house"
             + " LEFT JOIN room ON house.uuid=room.house_uuid"
             + " LEFT JOIN chair ON room.uuid=chair.room_uuid"
@@ -23,50 +27,66 @@ class MySqlHouseRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
         val parameters = HashMap<String, Any>()
 
         return jdbcTemplate.query(sql, parameters, houseResultSetExtractor)
-            .map { (houseUuid, houseDto) -> houseDtoToHouseTranslator.translate(houseUuid, houseDto) }
+            .mapValues { houseDtoToHouseTranslator.translate(it.value) }
     }
 
-    override fun saveHouse(house: House) {
+    override fun saveHouse(house: House): UUID {
 
-        val sql = "INSERT INTO house (uuid) VALUES (:uuid)"
+        val sql = "INSERT INTO house (uuid, style) VALUES (:uuid, :style)"
 
         val parameters = HashMap<String, Any>()
-        parameters.put("uuid", house.uuid.toString())
+        val uuid = UUID.randomUUID()
+        parameters.put("uuid", uuid.toString())
+        parameters.put("style", house.style.toString())
 
         jdbcTemplate.update(sql, parameters)
+
+        return uuid
     }
 
-    override fun addRoomToHouse(room: Room, houseUuid: UUID) {
+    override fun addRoomToHouse(houseUuid: UUID, room: Room): UUID {
 
-        val sql = "INSERT INTO room (uuid, house_uuid) VALUES (:uuid, :house_uuid)"
+        val sql = "INSERT INTO room (uuid, house_uuid, square_footage) VALUES (:uuid, :house_uuid, :square_footage)"
 
         val parameters = HashMap<String, Any>()
-        parameters.put("uuid", room.uuid.toString())
+        val uuid = UUID.randomUUID()
+        parameters.put("uuid", uuid.toString())
         parameters.put("house_uuid", houseUuid.toString())
+        parameters.put("square_footage", room.squareFootage)
 
         jdbcTemplate.update(sql, parameters)
+
+        return uuid
     }
 
-    override fun addChairToRoom(chair: Chair, roomUuid: UUID) {
+    override fun addChairToRoom(roomUuid: UUID, chair: Chair): UUID {
 
-        val sql = "INSERT INTO chair (uuid, room_uuid) VALUES (:uuid, :room_uuid)"
+        val sql = "INSERT INTO chair (uuid, room_uuid, reclines) VALUES (:uuid, :room_uuid, :reclines)"
 
         val parameters = HashMap<String, Any>()
-        parameters.put("uuid", chair.uuid.toString())
+        val uuid = UUID.randomUUID()
+        parameters.put("uuid", uuid.toString())
+        parameters.put("reclines", chair.reclines)
         parameters.put("room_uuid", roomUuid.toString())
 
         jdbcTemplate.update(sql, parameters)
+
+        return uuid
     }
 
-    override fun addLegToChair(leg: Leg, chairUuid: UUID) {
+    override fun addLegToChair(chairUuid: UUID, leg: Leg): UUID {
 
-        val sql = "INSERT INTO leg (uuid, chair_uuid) VALUES (:uuid, :chair_uuid)"
+        val sql = "INSERT INTO leg (uuid, chair_uuid, material) VALUES (:uuid, :chair_uuid, :material)"
 
         val parameters = HashMap<String, Any>()
-        parameters.put("uuid", leg.uuid.toString())
+        val uuid = UUID.randomUUID()
+        parameters.put("uuid", uuid.toString())
+        parameters.put("material", leg.material.toString())
         parameters.put("chair_uuid", chairUuid.toString())
 
         jdbcTemplate.update(sql, parameters)
+
+        return uuid
     }
 
     override fun deleteAll() {
