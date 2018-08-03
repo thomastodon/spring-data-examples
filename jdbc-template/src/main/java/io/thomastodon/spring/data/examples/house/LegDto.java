@@ -1,30 +1,24 @@
 package io.thomastodon.spring.data.examples.house;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.UUID;
 
-class House {
+class LegDto {
 
     private final UUID uuid;
-    private final List<Room> rooms;
 
-    House(UUID uuid, List<Room> rooms) {
+    LegDto(UUID uuid) {
         this.uuid = uuid;
-        this.rooms = rooms;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
     @Override
     public String toString() {
-        return "House{" +
+        return "Leg{" +
             "uuid=" + uuid +
-            ", rooms=" + rooms +
             '}';
     }
 
@@ -32,14 +26,13 @@ class House {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        House house = (House) o;
-        return Objects.equals(uuid, house.uuid) &&
-            Objects.equals(rooms, house.rooms);
+        LegDto leg = (LegDto) o;
+        return Objects.equals(uuid, leg.uuid);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(uuid, rooms);
+        return Objects.hash(uuid);
     }
 }

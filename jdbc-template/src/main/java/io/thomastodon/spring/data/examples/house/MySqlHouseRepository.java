@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 public class MySqlHouseRepository implements HouseRepository {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private ResultSetExtractor<List<House>> houseResultSetExtractor = new HouseResultSetExtractor();
+    private ResultSetExtractor<List<HouseDto>> houseResultSetExtractor = new HouseResultSetExtractor();
+    private Translator<HouseDto, House> houseDtoToHouseTranslator = new HouseDtoToHouseTranslator();
 
     MySqlHouseRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -33,7 +37,10 @@ public class MySqlHouseRepository implements HouseRepository {
 
         Map<String, Object> parameters = new HashMap<>();
 
-        return jdbcTemplate.query(sql, parameters, houseResultSetExtractor);
+        return jdbcTemplate.query(sql, parameters, houseResultSetExtractor)
+            .stream()
+            .map(houseDtoToHouseTranslator::translate)
+            .collect(toList());
     }
 
     @Override
