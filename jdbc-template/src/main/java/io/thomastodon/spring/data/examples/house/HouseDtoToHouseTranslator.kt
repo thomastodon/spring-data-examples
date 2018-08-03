@@ -1,18 +1,20 @@
 package io.thomastodon.spring.data.examples.house
 
-class HouseDtoToHouseTranslator : Translator<HouseDto, House> {
+import java.util.*
 
-    override fun translate(source: HouseDto): House {
+class HouseDtoToHouseTranslator {
+
+    fun translate(houseUuid: UUID, houseDto: HouseDto): House {
 
         return House(
-            source.uuid,
-            source.rooms.map{ roomDto ->
+            houseUuid,
+            houseDto.rooms.map { (roomUuid, roomDto) ->
                 Room(
-                    roomDto.uuid,
-                    roomDto.chairs.map{ chairDto ->
+                    roomUuid,
+                    roomDto.chairs.map { (chairUuid, chairDto) ->
                         Chair(
-                            chairDto.uuid,
-                            chairDto.legs.map{ legDto -> Leg(legDto.uuid) }
+                            chairUuid,
+                            chairDto.legs.map { (legUuid, legDto) -> Leg(legUuid) }
                         )
                     }
                 )

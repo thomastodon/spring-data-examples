@@ -18,13 +18,12 @@ class MySqlHouseRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
             + " FROM house"
             + " LEFT JOIN room ON house.uuid=room.house_uuid"
             + " LEFT JOIN chair ON room.uuid=chair.room_uuid"
-            + " LEFT JOIN leg ON chair.uuid=leg.chair_uuid"
-            + " ORDER BY house.uuid, room.uuid, chair.uuid")
+            + " LEFT JOIN leg ON chair.uuid=leg.chair_uuid")
 
         val parameters = HashMap<String, Any>()
 
         return jdbcTemplate.query(sql, parameters, houseResultSetExtractor)
-            .map { houseDtoToHouseTranslator.translate(it) }
+            .map { (houseUuid, houseDto) -> houseDtoToHouseTranslator.translate(houseUuid, houseDto) }
     }
 
     override fun saveHouse(house: House) {
